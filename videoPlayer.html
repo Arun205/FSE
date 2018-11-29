@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+	<!-- Glyphicons CSS -->
+	<link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <title>X Player</title>
+  </head>
+  <body class="bodywrapper">
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<!-- bootstrap -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<!-- glyphicon -->
+  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!------------------------------------------------------------------------->
+  <div class="row headerwrapper">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      <h1 style="text-align: center; color: wheat">X Player</h1>
+    </div>
+    <div class="col-md-3"></div>
+  </div>
+  
+  <div class="row">
+      <!-- <div class="col-md-1">
+      </div> -->
+      <div class="col-md-7" style="text-align: left; margin-left: 25px">
+        <h2 style="text-align: left;">Video 1</h2>
+        <video id="video" width="600">
+          <source src="videos/video2.mp4" type="video/mp4">
+        </video>
+        <div class="row" style="font-size: 24px; color:rgb(10, 132, 136)">
+          <div class="col">
+            <span id="play" class="glyphicon glyphicon-play" onclick="play()"></span>
+          </div>
+          <div class="col">
+            <span id="pause" class="glyphicon glyphicon-pause" onclick="pause()"></span>
+          </div>
+          <div class="col">
+            <span id="stop" class="glyphicon glyphicon-stop" onclick="stop()"></span>
+          </div>
+          <div class="col">
+            <span class="glyphicon glyphicon-arrow-left"></span>
+          </div>
+          <div class="col">
+            <span class="glyphicon glyphicon-arrow-right"></span>
+          </div>
+          <div class="col">
+            <span class="glyphicon glyphicon-arrow-down" onclick="volumedown()"></span>
+          </div>
+          <div class="col">
+            <span class="glyphicon glyphicon-arrow-up" onclick="volumeup()"></span>
+          </div>
+          <div class="col">
+            <span id="volumeoff" class="glyphicon glyphicon-volume-off" onclick="volumeoff()"></span>
+          </div>
+          <div id="volumeon" class="col" style="color:rgb(119, 175, 177)">
+            <span class="glyphicon glyphicon-volume-down" onclick="volumeon()"></span>
+          </div>
+          <div class="col">
+            <span class="glyphicon glyphicon-thumbs-up">
+              <span class="badge badge-light">4</span>
+            </span>
+          </div>
+          <div class="col">
+            <span class="glyphicon glyphicon-thumbs-down">
+              <span class="badge badge-light">4</span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div id="upcomingvideos" style="margin-left: 25px; background-color:rgb(119, 175, 177)" class="col-md-4">
+        <div class="card" style="background-color:rgb(119, 175, 177); border: 0px">
+          <div class="card-body">
+            <h4>Upcoming Videos</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!------------------------------------------------------------------------->
+	<script>
+	var video = document.getElementById("video");
+
+  window.onload = function() {
+    for (i=0; i<7; i++) {
+    var upcomingvideos = document.createDocumentFragment();
+    var div1 = document.createElement("div");
+    div1.className = "row";
+    var div2 = document.createElement("div");
+    div2.className = "col";
+    var div3 = document.createElement("div");
+    div3.className = "card";
+    var div4 = document.createElement("div");
+    div4.className = "card-body";
+    var h1 = document.createElement("h5");
+    h1.innerHTML = "Thumbnail 1";
+    div4.appendChild(h1);
+    div3.appendChild(div4);
+    div2.appendChild(div3);
+    div1.appendChild(div2);
+
+    var div5 = document.createElement("div");
+    div5.className = "col";
+    var div6 = document.createElement("div");
+    div6.className = "card";
+    var div7 = document.createElement("div");
+    div7.className = "card-body";
+    var h2 = document.createElement("h5");
+    h2.className = "card-title";
+    h2.innerHTML = "Video 1 Name";
+    var p1 = document.createElement("p");
+    p1.className = "card-text";
+    p1.innerHTML = "Description of Video 1";
+    div7.appendChild(h2);
+    // div7.appendChild(p1);
+    div6.appendChild(div7);
+    div5.appendChild(div6);
+    div1.appendChild(div5);
+    
+    document.getElementById("upcomingvideos").appendChild(div1);
+    var br = document.createElement("br");
+    document.getElementById("upcomingvideos").appendChild(br);
+    }
+  };
+	
+	function play() {
+    console.log('play');
+		video.play();
+    document.getElementById("play").style.color = "rgb(119, 175, 177)";
+    document.getElementById("play").style.pointerEvents = "none";
+    document.getElementById("pause").style.color = "rgb(10, 132, 136)";
+    document.getElementById("pause").style.pointerEvents = "all";
+    console.log(video.volume);
+	}
+  function pause() {
+    console.log('pause');
+		video.pause();
+    document.getElementById("pause").style.color = "rgb(119, 175, 177)";
+    document.getElementById("pause").style.pointerEvents = "none";
+    document.getElementById("play").style.color = "rgb(10, 132, 136)";
+    document.getElementById("play").style.pointerEvents = "all";
+	}
+  function stop() {
+    video.currentTime = 0;
+    video.pause();
+    document.getElementById("play").style.color = "rgb(10, 132, 136)";
+    document.getElementById("play").style.pointerEvents = "all";
+    document.getElementById("pause").style.color = "rgb(10, 132, 136)";
+    document.getElementById("pause").style.pointerEvents = "all";
+  }
+  function volumeup() {
+    console.log('volumeup before', video.volume);
+    if (video.volume < .95) {
+      video.volume = video.volume + 0.1;
+    } else {
+      video.volume = 1;
+    }
+    console.log('volumeup after', video.volume);
+  }
+  function volumedown() {
+    console.log('volumedown before', video.volume);
+    if (video.volume > 0.05) {
+      video.volume = video.volume - 0.1;
+    } else {
+      video.volume = 0;
+    }
+    console.log('volumedown after', video.volume);
+  }
+  function volumeoff(){
+    console.log('volumeoff before', video.volume);
+    video.volume = 0;
+    document.getElementById("volumeoff").style.color = "rgb(119, 175, 177)";
+    document.getElementById("volumeoff").style.pointerEvents = "none";
+    document.getElementById("volumeon").style.color = "rgb(10, 132, 136)";
+    document.getElementById("volumeon").style.pointerEvents = "all";
+    console.log('volumeoff after', video.volume);
+  }
+  function volumeon(){
+    console.log('volumeon before', video.volume);
+    video.volume = 0.5;
+    document.getElementById("volumeon").style.color = "rgb(119, 175, 177)";
+    document.getElementById("volumeon").style.pointerEvents = "none";
+    document.getElementById("volumeoff").style.color = "rgb(10, 132, 136)";
+    document.getElementById("volumeoff").style.pointerEvents = "all";
+    console.log('volumeon after', video.volume);
+  }
+	</script>
+  </body>
+</html>
