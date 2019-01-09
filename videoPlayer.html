@@ -83,25 +83,17 @@
   <!------------------------------------------------------------------------->
 	<script>
 	var video = document.getElementById("video");
+  var videosTable = new Array;
+  var currentVideo = "video1";
 
   window.onload = function() {
-    var videosTable = new Array;
-
-    var likeCount = "75";
-    var likeDisplay = likeCount.fontsize(4)
-    document.getElementById("like").innerHTML = likeDisplay;
-
-    var dislikeCount = "25";
-    var dislikeDisplay = dislikeCount.fontsize(4)
-    document.getElementById("dislike").innerHTML = dislikeDisplay;
-
     for (i=1; i<=10; i++) {
       if (!localStorage.getItem('videosTable')) {
-        videosTable.push(new videoObj('video' + i,'','','',''));
+        videosTable.push(new videoObj('video' + i,0,0,'',''));
       }
       var upcomingvideos = document.createDocumentFragment();
       var div1 = document.createElement("div");
-      div1.className = "row";
+      div1.className = "row";      
       var div2 = document.createElement("div");
       div2.className = "col";
       var div3 = document.createElement("div");
@@ -109,7 +101,7 @@
       var div4 = document.createElement("div");
       div4.className = "card-body";
       var h1 = document.createElement("h5");
-      h1.innerHTML = "Thumbnail 1";
+      h1.innerHTML = "Thumbnail " + i;
       div4.appendChild(h1);
       div3.appendChild(div4);
       div2.appendChild(div3);
@@ -123,7 +115,7 @@
       div7.className = "card-body";
       var h2 = document.createElement("h5");
       h2.className = "card-title";
-      h2.innerHTML = "Video 1 Name";
+      h2.innerHTML = "Video " + i;
       var p1 = document.createElement("p");
       p1.className = "card-text";
       p1.innerHTML = "Description of Video 1";
@@ -132,33 +124,67 @@
       div5.appendChild(div6);
       div1.appendChild(div5);
       
+      var videoID = "video" + i;
+      div1.addEventListener("click", function(videoID) {
+        return function(){
+          videoSelected(videoID);
+        }
+      }(videoID), false);
       document.getElementById("upcomingvideos").appendChild(div1);
       var br = document.createElement("br");
       document.getElementById("upcomingvideos").appendChild(br);
     }
     if (!localStorage.getItem('videosTable')) {
-      console.log('no');
       localStorage.setItem("videosTable", JSON.stringify(videosTable));
     } else {
       videosTable = JSON.parse(localStorage.getItem("videosTable"));
-      console.log('yes');
     }
-    console.log(videosTable);
-  };
+
+    document.getElementById("like").innerHTML = videosTable[0].likes;
+    document.getElementById("dislike").innerHTML = videosTable[0].dislikes;
+  }
   
   video.addEventListener("timeupdate", function() {
     var seekbar = document.getElementById("seekbar");
     seekbar.value = video.currentTime / video.duration * 100;
   });
+
+  like.addEventListener("click", function() {
+    videosTable = JSON.parse(localStorage.getItem("videosTable"));
+    for (i=0; i<10; i++) {
+      if ( currentVideo == videosTable[i].name) {
+        videosTable[i].likes = videosTable[i].likes + 1;
+        localStorage.setItem("videosTable", JSON.stringify(videosTable));
+        document.getElementById("like").innerHTML = videosTable[i].likes;
+      }
+    }
+  });
+  
+  dislike.addEventListener("click", function() {
+    videosTable = JSON.parse(localStorage.getItem("videosTable"));
+    for (i=0; i<10; i++) {
+      if ( currentVideo == videosTable[i].name) {
+        videosTable[i].dislikes = videosTable[i].dislikes + 1;
+        localStorage.setItem("videosTable", JSON.stringify(videosTable));
+        document.getElementById("dislike").innerHTML = videosTable[i].dislikes;
+      }
+    }
+  });
+
+  function videoSelected(videoID) {
+    console.log('video selected', videoID);
+    currentVideo = videoID;
+    var videoPath = "videos/" + videoID + ".mp4";
+    document.getElementById("video").setAttribute("src", videoPath);
+    video.play();
+  }
 	
 	function play() {
-    console.log('play');
 		video.play();
     document.getElementById("play").style.color = "rgb(119, 175, 177)";
     document.getElementById("play").style.pointerEvents = "none";
     document.getElementById("pause").style.color = "rgb(10, 132, 136)";
     document.getElementById("pause").style.pointerEvents = "all";
-    console.log(video.volume);
 	}
   function pause() {
     console.log('pause');
