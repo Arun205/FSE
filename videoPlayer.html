@@ -85,6 +85,7 @@
   var currentVideo = "video1";
   var volume = "on";
   var videoName = new Array;
+  var seekbarClicked = false;
   for (i=0; i<7; i++){
     videoName[0] = "1 - Introduction to HTML";
     videoName[1] = "2 - Creating the first web page";
@@ -109,9 +110,11 @@
       div3.className = "card";
       var div4 = document.createElement("div");
       div4.className = "card-body";
+      var thumbnail = document.createElement("img");
+      thumbnail.src = "thumbnails/thumbnail_" + i + ".png";
       var h1 = document.createElement("h5");
       h1.innerHTML = "Thumbnail " + i;
-      div4.appendChild(h1);
+      div4.appendChild(thumbnail);
       div3.appendChild(div4);
       div2.appendChild(div3);
       div1.appendChild(div2);
@@ -154,13 +157,16 @@
   }
   
   video.addEventListener("timeupdate", function() {
-    var seekbar = document.getElementById("seekbar");
-    seekbar.value = video.currentTime / video.duration * 100;
+    if (seekbarClicked) {
+      seekbarClicked = false;
+    } else {
+      seekbar.value = video.currentTime / video.duration * 100;
+    }
   });
 
   seekbar.addEventListener("click", function(){
+    seekbarClicked = true;
     video.currentTime = seekbar.value / 100 * video.duration;
-    console.log("time", video.currentTime);
   });
 
   like.addEventListener("click", function() {
