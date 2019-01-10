@@ -32,7 +32,7 @@
   
   <div class="row">
       <div class="col-md-7" style="text-align: left; margin-left: 25px">
-        <h2 id="videoheader" style="text-align: left;">Video 1</h2>
+        <h2 id="videoheader" style="text-align: left;">1 - Introduction to HTML</h2>
         <video id="video" controls.progressbar width="600">
           <source src="videos/video2.mp4" type="video/mp4">
         </video>
@@ -84,11 +84,21 @@
   var videosTable = new Array;
   var currentVideo = "video1";
   var volume = "on";
+  var videoName = new Array;
+  for (i=0; i<7; i++){
+    videoName[0] = "1 - Introduction to HTML";
+    videoName[1] = "2 - Creating the first web page";
+    videoName[2] = "3 - Line breaks, spacing, and comments";
+    videoName[3] = "4 - Ordered and Unordered lists";
+    videoName[4] = "5 - Creating a table";
+    videoName[5] = "6 - Creating a web link";
+    videoName[6] = "7 - Creating links within same web page";
+  }
 
   window.onload = function() {
-    for (i=0; i<10; i++) {
+    for (i=0; i<7; i++) {
       if (!localStorage.getItem('videosTable')) {
-        videosTable.push(new videoObj('video' + i,0,0,'',0.00000));
+        videosTable.push(new videoObj('video' + i,0,0,videoName[i],0.00000));
       }
       var upcomingvideos = document.createDocumentFragment();
       var div1 = document.createElement("div");
@@ -114,7 +124,7 @@
       div7.className = "card-body";
       var h2 = document.createElement("h5");
       h2.className = "card-title";
-      h2.innerHTML = "Video " + i;
+      h2.innerHTML = videoName[i];
       var p1 = document.createElement("p");
       p1.className = "card-text";
       p1.innerHTML = "Description of Video 1";
@@ -132,6 +142,7 @@
       var br = document.createElement("br");
       document.getElementById("upcomingvideos").appendChild(br);
     }
+    
     if (!localStorage.getItem('videosTable')) {
       localStorage.setItem("videosTable", JSON.stringify(videosTable));
     } else {
@@ -165,7 +176,7 @@
   
   dislike.addEventListener("click", function() {
     videosTable = JSON.parse(localStorage.getItem("videosTable"));
-    for (i=0; i<10; i++) {
+    for (i=0; i<7; i++) {
       if ( currentVideo == videosTable[i].name) {
         videosTable[i].dislikes = videosTable[i].dislikes + 1;
         localStorage.setItem("videosTable", JSON.stringify(videosTable));
@@ -180,9 +191,9 @@
     currentVideo = "video" + id;
     var videoPath = "videos/" + currentVideo + ".mp4";
 
-    document.getElementById("videoheader").innerHTML = videosTable[id].name;
+    document.getElementById("videoheader").innerHTML = videosTable[id].comments;
     
-    for (i=0; i<10; i++) {
+    for (i=0; i<7; i++) {
       if ( currentVideo == videosTable[i].name) {
         document.getElementById("like").innerHTML = videosTable[id].likes;
         document.getElementById("dislike").innerHTML = videosTable[id].dislikes;
