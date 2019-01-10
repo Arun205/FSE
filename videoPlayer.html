@@ -31,10 +31,8 @@
   </div>
   
   <div class="row">
-      <!-- <div class="col-md-1">
-      </div> -->
       <div class="col-md-7" style="text-align: left; margin-left: 25px">
-        <h2 style="text-align: left;">Video 1</h2>
+        <h2 id="videoheader" style="text-align: left;">Video 1</h2>
         <video id="video" controls.progressbar width="600">
           <source src="videos/video2.mp4" type="video/mp4">
         </video>
@@ -42,11 +40,11 @@
           <input id="seekbar" type="range" value=0>
         </div>
         <div class="row" style="font-size: 30px; color:rgb(10, 132, 136)">
-          <div class="col">
-            <span id="play" class="glyphicon glyphicon-play" onclick="play()"></span>
+          <div class="col" ngbTooltip="play">
+            <span id="play" placement="bottom" class="glyphicon glyphicon-play" onclick="play()"></span>
           </div>
           <div class="col">
-            <span id="pause" class="glyphicon glyphicon-pause" onclick="pause()"></span>
+            <span id="pause" class="glyphicon glyphicon-pause" style="color:rgb(119, 175, 177)" onclick="pause()"></span>
           </div>
           <div class="col">
             <span id="stop" class="glyphicon glyphicon-stop" onclick="stop()"></span>
@@ -58,10 +56,10 @@
             <span class="glyphicon glyphicon-arrow-up" onclick="volumeup()"></span>
           </div>
           <div class="col">
-            <span id="volumeoff" class="glyphicon glyphicon-volume-off" onclick="volumeoff()"></span>
+            <span id="togglemute" class="glyphicon glyphicon-volume-off" onclick="togglemute()"></span>
           </div>
-          <div id="volumeon" class="col" style="color:rgb(119, 175, 177)">
-            <span class="glyphicon glyphicon-volume-down" onclick="volumeon()"></span>
+          <div id="volumeon" class="col">
+            <span class="glyphicon glyphicon-repeat" onclick="reload()"></span>
           </div>
           <div class="col">
             <span id="like" class="glyphicon glyphicon-thumbs-up"></span>
@@ -85,11 +83,12 @@
 	var video = document.getElementById("video");
   var videosTable = new Array;
   var currentVideo = "video1";
+  var volume = "on";
 
   window.onload = function() {
     for (i=0; i<10; i++) {
       if (!localStorage.getItem('videosTable')) {
-        videosTable.push(new videoObj('video' + i,0,0,'',''));
+        videosTable.push(new videoObj('video' + i,0,0,'',0.00000));
       }
       var upcomingvideos = document.createDocumentFragment();
       var div1 = document.createElement("div");
@@ -148,6 +147,11 @@
     seekbar.value = video.currentTime / video.duration * 100;
   });
 
+  seekbar.addEventListener("click", function(){
+    video.currentTime = seekbar.value / 100 * video.duration;
+    console.log("time", video.currentTime);
+  });
+
   like.addEventListener("click", function() {
     videosTable = JSON.parse(localStorage.getItem("videosTable"));
     for (i=0; i<10; i++) {
@@ -171,17 +175,32 @@
   });
 
   function videoSelected(id) {
+    var prevVideo = currentVideo;
+    var resumeTime;
     currentVideo = "video" + id;
-    console.log('video selected', currentVideo);
     var videoPath = "videos/" + currentVideo + ".mp4";
-    document.getElementById("video").setAttribute("src", videoPath);
-    video.play();
+
+    document.getElementById("videoheader").innerHTML = videosTable[id].name;
+    
     for (i=0; i<10; i++) {
       if ( currentVideo == videosTable[i].name) {
         document.getElementById("like").innerHTML = videosTable[id].likes;
         document.getElementById("dislike").innerHTML = videosTable[id].dislikes;
+        resumeTime = videosTable[i].time;
+      }
+      if ( prevVideo == videosTable[i].name) {
+        if (video.currentTime == video.duration) {
+          videosTable[i].time = 0;
+        } else {
+          videosTable[i].time = video.currentTime;
+        }
+        localStorage.setItem("videosTable", JSON.stringify(videosTable));
       }
     }
+    console.log("resume", resumeTime);
+    document.getElementById("video").setAttribute("src", videoPath);
+    play();
+    video.currentTime = resumeTime;
   }
 	
 	function play() {
@@ -192,7 +211,6 @@
     document.getElementById("pause").style.pointerEvents = "all";
 	}
   function pause() {
-    console.log('pause');
 		video.pause();
     document.getElementById("pause").style.color = "rgb(119, 175, 177)";
     document.getElementById("pause").style.pointerEvents = "none";
@@ -204,8 +222,8 @@
     video.pause();
     document.getElementById("play").style.color = "rgb(10, 132, 136)";
     document.getElementById("play").style.pointerEvents = "all";
-    document.getElementById("pause").style.color = "rgb(10, 132, 136)";
-    document.getElementById("pause").style.pointerEvents = "all";
+    document.getElementById("pause").style.color = "rgb(119, 175, 177)";
+    document.getElementById("pause").style.pointerEvents = "none";
   }
   function volumeup() {
     console.log('volumeup before', video.volume);
@@ -225,23 +243,25 @@
     }
     console.log('volumedown after', video.volume);
   }
-  function volumeoff(){
-    console.log('volumeoff before', video.volume);
-    video.volume = 0;
-    document.getElementById("volumeoff").style.color = "rgb(119, 175, 177)";
-    document.getElementById("volumeoff").style.pointerEvents = "none";
-    document.getElementById("volumeon").style.color = "rgb(10, 132, 136)";
-    document.getElementById("volumeon").style.pointerEvents = "all";
-    console.log('volumeoff after', video.volume);
+  function togglemute(){
+    console.log('togglemute', volume);
+    if (volume == "on"){
+      console.log('togglemute', volume);
+      volume = "off";
+      video.volume = 0;
+      document.getElementById("togglemute").classList.remove("glyphicon-volume-off");
+      document.getElementById("togglemute").classList.add("glyphicon-volume-up");
+    } else {
+      console.log('togglemute', volume);
+      volume = "on";
+      video.volume = 0.5;
+      document.getElementById("togglemute").classList.remove("glyphicon-volume-up");
+      document.getElementById("togglemute").classList.add("glyphicon-volume-off");
+    }
   }
-  function volumeon(){
-    console.log('volumeon before', video.volume);
-    video.volume = 0.5;
-    document.getElementById("volumeon").style.color = "rgb(119, 175, 177)";
-    document.getElementById("volumeon").style.pointerEvents = "none";
-    document.getElementById("volumeoff").style.color = "rgb(10, 132, 136)";
-    document.getElementById("volumeoff").style.pointerEvents = "all";
-    console.log('volumeon after', video.volume);
+  function reload(){
+    video.currentTime = 0;
+    play();
   }
 
   class videoObj {
