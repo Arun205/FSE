@@ -87,7 +87,7 @@
   var currentVideo = "video1";
 
   window.onload = function() {
-    for (i=1; i<=10; i++) {
+    for (i=0; i<10; i++) {
       if (!localStorage.getItem('videosTable')) {
         videosTable.push(new videoObj('video' + i,0,0,'',''));
       }
@@ -124,12 +124,11 @@
       div5.appendChild(div6);
       div1.appendChild(div5);
       
-      var videoID = "video" + i;
-      div1.addEventListener("click", function(videoID) {
+      div1.addEventListener("click", function(id) {
         return function(){
-          videoSelected(videoID);
+          videoSelected(id);
         }
-      }(videoID), false);
+      }(i), false);
       document.getElementById("upcomingvideos").appendChild(div1);
       var br = document.createElement("br");
       document.getElementById("upcomingvideos").appendChild(br);
@@ -171,12 +170,18 @@
     }
   });
 
-  function videoSelected(videoID) {
-    console.log('video selected', videoID);
-    currentVideo = videoID;
-    var videoPath = "videos/" + videoID + ".mp4";
+  function videoSelected(id) {
+    currentVideo = "video" + id;
+    console.log('video selected', currentVideo);
+    var videoPath = "videos/" + currentVideo + ".mp4";
     document.getElementById("video").setAttribute("src", videoPath);
     video.play();
+    for (i=0; i<10; i++) {
+      if ( currentVideo == videosTable[i].name) {
+        document.getElementById("like").innerHTML = videosTable[id].likes;
+        document.getElementById("dislike").innerHTML = videosTable[id].dislikes;
+      }
+    }
   }
 	
 	function play() {
